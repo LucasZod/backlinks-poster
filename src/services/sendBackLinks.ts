@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import Backlink from '../models/Backlink'
 import Campaign from '../models/Campaign'
 import CampaignBlogsUrl from '../models/CampaignBlogsUrl'
@@ -13,7 +14,7 @@ export const sendBacklinks = async (campaignId: number) => {
   startCampaignInMemory(campaignId)
 
   const campaignBlogsUrls = await CampaignBlogsUrl.findAll({
-    where: { campaignId, status: 'pendente' },
+    where: { campaignId, status: { [Op.or]: ['pendente', 'em andamento'] } },
   })
 
   const backLinks = await Backlink.findAll({ where: { customerId: campaign?.customerId } })
